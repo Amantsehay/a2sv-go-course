@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
-	"log"
+	"os"
+	"strconv"
 )
 
 type Student struct {
@@ -19,15 +21,19 @@ func calculateAverage(grades map[string]float64) float64 {
 }
 
 func main() {
+	scanner := bufio.NewScanner(os.Stdin)
+
 	var student Student
 	fmt.Print("Enter student's name: ")
-	fmt.Scanln(&student.Name)
+	scanner.Scan()
+	student.Name = scanner.Text()
 
 	var numSubjects int
 	for {
 		fmt.Print("Enter number of subjects: ")
-		_, err := fmt.Scanln(&numSubjects)
-		if err != nil || numSubjects <= 0 {
+		scanner.Scan()
+		numSubjects, _ = strconv.Atoi(scanner.Text())
+		if numSubjects <= 0 {
 			fmt.Println("Please enter a positive number for the number of subjects.")
 		} else {
 			break
@@ -37,14 +43,16 @@ func main() {
 	student.Subjects = make(map[string]float64)
 
 	for i := 0; i < numSubjects; i++ {
-		var subject string
-		fmt.Printf("Enter subject %d: ", i+1)
-		fmt.Scanln(&subject)
+		fmt.Printf("Enter subject %d (e.g., 'Mathematics'): ", i+1)
+		scanner.Scan()
+		subject := scanner.Text()
 
 		var grade float64
 		for {
 			fmt.Printf("Enter grade for subject %s (0 to 100): ", subject)
-			_, err := fmt.Scanln(&grade)
+			scanner.Scan()
+			gradeInput := scanner.Text()
+			grade, err := strconv.ParseFloat(gradeInput, 64)
 			if err != nil {
 				fmt.Println("Invalid input. Please enter a valid number.")
 				continue
