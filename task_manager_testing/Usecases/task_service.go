@@ -50,3 +50,6 @@ func (uc *TaskUsecase) DeleteTask(id string) error {
 	}
 	return uc.taskRepo.DeleteTask(context.TODO(), id)
 }
+
+
+
